@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['fertile', 'infertile']
+
+roboflow:
+  workspace: skripsi-gqi1u
+  project: dataset-new-c9tqt
+  version: 6
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/skripsi-gqi1u/dataset-new-c9tqt/dataset/6
