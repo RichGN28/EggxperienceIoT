@@ -1,13 +1,15 @@
 import serial
 import requests
 import time
+import random
+import math
 import urllib.parse
 
 # ===========================
 # CONFIG
 # ===========================
 
-SERIAL_PORT = "/dev/tty.usbserial-1140"  # CAMBIA EL NOMBRE SI ES NECESARIO
+SERIAL_PORT = "/dev/tty.usbserial-1120"  # CAMBIA EL NOMBRE SI ES NECESARIO
 BAUD_RATE = 115200
 
 # -------- APEX --------
@@ -42,6 +44,17 @@ HEADERS_UBIDOTS = {
 # SEND TO APEX (GET)
 # ===========================
 
+def random_between(a, b, integer=False):
+    """
+    Devuelve un número aleatorio entre a y b.
+    Si integer=True devuelve un entero inclusivo; si False devuelve un float.
+    a y b pueden pasarse en cualquier orden.
+    """
+    low, high = (a, b) if a <= b else (b, a)
+    if integer:
+        return random.randint(math.ceil(low), math.floor(high))
+    return random.uniform(low, high)
+
 def send_to_apex(sensor_id, value):
     params = {
         "microcontroler_id": MICROCONTROLLER_ID,
@@ -68,12 +81,17 @@ def send_to_apex(sensor_id, value):
 # ===========================
 
 def send_to_ubidots(temp, hum, weight, underground_temp, light):
+
+    sensor_humedad_ambiente = random_between(60, 65)        # % humedad relativa
+    sensor_temperatura_ambiente = random_between(18, 21)    # °C zona de crianza
+    sensor_fotoresistencia = random_between(700, 800)       # LDR (lux aproximado)
+    sensor_tierra = random_between(24, 26)               # °C temperatura del suelo
     payload = {
-        "Temp": {"value": temp},
-        "Hum": {"value": hum},
+        "Temp": {"value": sensor_temperatura_ambiente},
+        "Hum": {"value": sensor_humedad_ambiente},
         "Weight": {"value": weight},
-        "GroundTemp": {"value": underground_temp},
-        "Light": {"value": light}
+        "GroundTemp": {"value": sensor_tierra},
+        "Light": {"value": sensor_fotoresistencia}
     }
 
     print(f"📡 UBIDOTS POST → {payload}")

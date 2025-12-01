@@ -178,10 +178,12 @@ while True:
 
             # Mapear el nombre de la clase a FERTIL/INFERTIL
             # Ajusta estos nombres según tu modelo YOLO
-            if "fertil" in fert_label.lower() or "fertile" in fert_label.lower():
-                fertility_status = "FERTIL"
-            elif "infertil" in fert_label.lower() or "infertile" in fert_label.lower():
+            # Mapear el nombre de la clase a FERTIL/INFERTIL
+            fert_lower = fert_label.lower()
+            if fert_lower in ["infertil", "infertile"] or fert_lower.startswith("infertil"):
                 fertility_status = "INFERTIL"
+            elif fert_lower in ["fertil", "fertile"] or fert_lower.startswith("fertil"):
+                fertility_status = "FERTIL"
             else:
                 # Si tu modelo usa otros nombres, ajústalos aquí
                 fertility_status = fert_label.upper()
